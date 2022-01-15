@@ -64,3 +64,138 @@ max_value = max(K)
 max_index =K.index(max_value)
 print(max_index+1)
 
+
+
+
+
+
+
+###OTHER ALGORITHM
+
+
+
+a=[]
+b=[]
+c=[]
+for i in range(0,n1):
+    a.append("a"+str(i+1))
+print(a)
+for i in range(0,n2):
+    b.append("b"+str(i+1))
+print(b)
+for i in range(0,n3):
+    c.append("c"+str(i+1))
+print(c)
+import itertools
+k=[]
+k.append(a)
+k.append(b)
+k.append(c)
+t=list(itertools.product(*k))
+for i in range(0,len(t)):
+    t[i]=list(t[i])
+print(t)
+A=[]
+B=[]
+C=[]
+for i in range(0,n1):
+    A.append(i+1)
+print(A)
+for i in range(0,n2):
+    B.append(i+1)
+print(B)
+for i in range(0,n3):
+    C.append(i+1)
+print(C)
+import itertools
+V=[]
+V.append(A)
+V.append(B)
+V.append(C)
+versions=list(itertools.product(*V))
+for i in range(0,len(versions)):
+    versions[i]=list(versions[i])
+print(versions)
+
+
+
+
+from random import uniform as rand
+
+n=n1+n2+n3
+def randConstrained(n, M):
+     splits = [0] + [rand(0, 1) for _ in range(0,n-1)] + [1]
+     splits.sort()
+     diffs = [x - splits[i - 1] for i, x in enumerate(splits)][1:]
+     result = map(lambda x:x*M, diffs)
+     result=list(result)
+     return result
+L=randConstrained(n, 1)
+
+print(L)
+
+print(max(L))
+print(min(L))
+if n>=8:
+    while max(L)>0.25:
+        min_value = min(L)
+        min_index =L.index(min_value)
+        max_index =L.index(max(L))
+        m=max(L)-0.25
+        L[min_index]+=m
+        L[max_index]=L[max_index]-m
+        
+print(L) 
+sum(L)
+
+
+
+
+N1=[]
+N2=[]
+N3=[]
+for i in range(0,n1):
+    N1.append(L[i])
+for i in range(n1,n1+n2):
+    N2.append(L[i])
+for i in range(n1+n2,n1+n2+n3):
+    N3.append(L[i])
+print(N1)
+print(N2)
+print(N3)
+
+
+
+P=[]
+for i in versions:
+    s=N1[i[0]-1]+N2[i[1]-1]+N3[i[2]-1]
+    P.append(s)
+print(P) 
+print(max(P))
+index =P.index(max(P))
+print(t[index])
+
+
+from scipy.stats import bernoulli
+M=[]
+for i in P:
+    data_bern = bernoulli.rvs(size=1000,p=i)
+    data_bern=list(data_bern)
+    M.append(data_bern)
+print(M)
+
+
+K=[]
+for i in M:
+    s=0
+    for j in i:
+        s+=j
+    K.append(s)
+print(K)  
+
+
+
+
+max_value = max(K)
+max_index =K.index(max_value)
+print(t[max_index])
