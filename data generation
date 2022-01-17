@@ -1,79 +1,7 @@
-#I ask the user to enter the number of options we will have to find which is the best, as well as we ask him what these options will be.
-versions = []
-n = int(input("Enter number of elements : "))
-print
-for i in range(0, n):
-    ele = input("enter each element : ")
-    versions.append(ele)
-print(versions)
 
-
-#this is the library we will need.
-from random import uniform as rand
-
-#this function creates a list of probabilities where their sum is 1.
-def randConstrained(n, M):
-     splits = [0] + [rand(0, 1) for _ in range(0,n-1)] + [1]
-     splits.sort()
-     diffs = [x - splits[i - 1] for i, x in enumerate(splits)][1:]
-     result = map(lambda x:x*M, diffs)
-     result=list(result)
-     return result
-     
-#this function checks if there is any probability in this list that is above a number (in our case 0.25 where is our realistic case)
-def CheckForLess(list1, val):  
-    for x in list1: 
-        if val <= x: 
-            return False
-    return True
-
-L= randConstrained(n,1)
-
-a=CheckForLess(L,0.25)
-a=str(a)
-
-
-#if any probability exceeds 0.25 I recreate the list of probabilities until it is appropriate
-while a=="False":
-    L= randConstrained(n,1)
-
-print (L)
-print (sum(L))
-
-
-#I make a list where each element is a list of possible clicks or not clicks for each individual version and I can put as many repetitions as I want so that the result is more realistic
-from scipy.stats import bernoulli
-M=[]
-for i in L:
-    data_bern = bernoulli.rvs(size=100,p=i)
-    data_bern=list(data_bern)
-    M.append(data_bern)
-print(M)
-
-#I make a list where each element is how many impressions I have for each version
-K=[]
-for i in M:
-    s=0
-    for j in i:
-        s+=j
-    K.append(s)
-print(K)  
-
-
-max_value = max(K)
-max_index =K.index(max_value)
-print(max_index+1)
-
-
-
-
-
-
-
-###OTHER ALGORITHM
-
-
-
+n1 = int(input("Enter number of headers : "))
+n2 = int(input("Enter number of images : "))
+n3 = int(input("Enter number of texts : "))
 a=[]
 b=[]
 c=[]
@@ -116,6 +44,8 @@ versions=list(itertools.product(*V))
 for i in range(0,len(versions)):
     versions[i]=list(versions[i])
 print(versions)
+
+
 
 
 
@@ -176,6 +106,7 @@ index =P.index(max(P))
 print(t[index])
 
 
+
 from scipy.stats import bernoulli
 M=[]
 for i in P:
@@ -183,6 +114,7 @@ for i in P:
     data_bern=list(data_bern)
     M.append(data_bern)
 print(M)
+
 
 
 K=[]
@@ -194,8 +126,7 @@ for i in M:
 print(K)  
 
 
-
-
 max_value = max(K)
 max_index =K.index(max_value)
 print(t[max_index])
+
