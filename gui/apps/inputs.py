@@ -1,7 +1,15 @@
+"""
+TODO:
+    - Make number of inputs dynamic
+"""
+
+import json
 import dash_bootstrap_components as dbc
-from dash import Dash, html, Input, Output, callback_context
+from dash import Dash, html, Input, Output, callback_context, State
+from app import app
 
 from common.navbar import navbar
+from constant import PATH_EXPERIMENTS
 
 layout = html.Div(
     children=[
@@ -60,26 +68,42 @@ layout = html.Div(
                                 dbc.Row(dbc.Input(id="input8".format("number"), placeholder="Enter Value".format("text")))
                             ]
                         ),
-                        dbc.Col([dbc.Button("Run Experiment", id="Exp-btn", n_clicks=0)]),
+                        dbc.Col([dbc.Button("Run Experiment", id="run-experiment", n_clicks=0)]),
                         html.Div(id="container")
                     ]
                 ),
             ],
         ),
+        dbc.Modal(
+            [
+                dbc.ModalHeader(dbc.ModalTitle("Ran experiment!")),
+                dbc.ModalBody("You can visit the results page to view the results."),
+            ],
+            id="modal-lg",
+            size="lg",
+            is_open=False,
+        )
     ],
 )
 
-def Json_saved(input1, input2, input3, input4, input5, input6, n_clicks):
-    if n_clicks:
-        return json.dumps(input1, input2, input3, input4, input5, input6)
 
-@callback(
-    Output("container", "children"),
-    Input("Exp-btn", "n_clicks")
+def toggle_modal(n1, is_open):
+    if n1:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("modal-lg", "is_open"),
+    Input("run-experiment", "n_clicks"),
+    [State("input{}".format(i), "value") for i in range(1, 9)],
 )
-def Create_file(input1, input2, input3, input4, input5, input6, button):
-    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
-    if 'Exp-btn' in changed_id:
-        f = open(r"C:\Users\atsia\PycharmProjects\textfile.txt", "w")
-        f.write(json.dumps(input1, input2, input3, input4, input5, input6))
-        f.close()
+def run_experiment(n_clicks, *values):
+    idxs = [f'input_{i}' for i in range(1, 9)]
+    if n_clicks > 0:
+        experiment = {idx: value for idx, value in zip(idxs, values)}
+        name = experiment['input_1']  # experiment name
+        with open(PATH_EXPERIMENTS / (name + '.json'), 'w+') as fp:
+            json.dump(experiment, fp)
+        return True
+    return False
