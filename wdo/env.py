@@ -5,7 +5,7 @@ REWARD_NO_CLICK = 0
 
 
 class WebsiteEnvironmentSimple:
-    def __init__(self, proba):
+    def __init__(self, proba, *args, **kwargs):
         self.proba = proba
 
     def do(self, action):

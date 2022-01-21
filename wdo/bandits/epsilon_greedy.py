@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 
-from bandits.base import BanditBase
+from wdo.bandits.base import BanditBase
 
 
 class EpsilonGreedyBandit(BanditBase):

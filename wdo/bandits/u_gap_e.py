@@ -2,7 +2,7 @@ import numpy as np
 import math
 from abc import abstractmethod
 
-from bandits.base import BanditBase
+from wdo.bandits.base import BanditBase
 
 
 class UGapEBandit(BanditBase):

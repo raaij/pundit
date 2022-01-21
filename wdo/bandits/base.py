@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class BanditBase(ABC):
-    def __init__(self, K, env):
+    def __init__(self, K, env, *args, **kwargs):
         self.arms = list(range(K))
         self.env = env
         self.history = []
