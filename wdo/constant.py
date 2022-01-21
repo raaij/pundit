@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
 
-PATH_GUI = Path(os.path.dirname(__file__))
+PATH_BASE = Path(os.path.dirname(__file__))
+PATH_GUI = PATH_BASE / "gui"
 PATH_EXPERIMENTS = PATH_GUI / "experiments"

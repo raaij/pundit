@@ -2,10 +2,11 @@ from dash import html
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import Dash, html, Input, Output, callback_context, State
-from app import app
-from common.navbar import navbar
-from common.drop import dropdown
-from constant import PATH_EXPERIMENTS
+from wdo.gui.app import app
+from wdo.gui.common.navbar import navbar
+from wdo.gui.common.drop import dropdown
+from wdo.constant import PATH_EXPERIMENTS
+
 layout = html.Div(
     children=[
         navbar,

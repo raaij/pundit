@@ -1,7 +1,7 @@
 import dash_core_components as dcc
 import dash_html_components as html
-from app import app
-from apps import inputs, results
+from wdo.gui.app import app
+from wdo.gui.apps import inputs, results
 from dash.dependencies import Input, Output
 
 app.layout = html.Div([dcc.Location(id="url", refresh=False), html.Div(id="page-content")])
