@@ -22,8 +22,8 @@ class UGapEBandit(BanditBase):
         for arm in self.arms:
             arm_beta = self.get_arm_beta(arm)
             betas.append(arm_beta)
-            lower_bounds.append(np.mean(self.rewards[arm]) - arm_beta)
-            upper_bounds.append(np.mean(self.rewards[arm]) + arm_beta)
+            lower_bounds.append(self._compute_mean_reward(arm) - arm_beta)
+            upper_bounds.append(self._compute_mean_reward(arm) + arm_beta)
 
         for k in set(self.arms):
             values = []
@@ -40,7 +40,7 @@ class UGapEBandit(BanditBase):
                 return arm
 
         B_t, L_t, U_t, β_t = self.compute_round_parameters()
-        J_t = np.argsort(B_t)[:self.m]
+        J_t = np.argsort(B_t)[::-1][:self.m]
         u_t, l_t = self._compute_u_t(J_t, U_t), self._compute_l_t(J_t, L_t)
         arm = u_t if β_t[u_t] > β_t[l_t] else l_t
         return arm
@@ -67,6 +67,9 @@ class UGapEBandit(BanditBase):
                 u_t = arm
                 u_t_value = U_t[arm]
         return u_t
+
+    def _compute_mean_reward(self, arm):
+        return np.mean(self.rewards[arm])
 
 
 class UGapEBudgetBandit(UGapEBandit):
