@@ -2,10 +2,10 @@ from dash import html
 import dash_bootstrap_components as dbc
 from dash import dcc
 from dash import Dash, html, Input, Output, callback_context, State
-from wdo.gui.app import app
-from wdo.gui.common.navbar import navbar
-from wdo.gui.common.drop import dropdown
-from wdo.constant import PATH_EXPERIMENTS
+from app import app
+from common.navbar import navbar
+from common.drop import dropdown
+from constant import PATH_EXPERIMENTS
 
 layout = html.Div(
     children=[
@@ -14,12 +14,15 @@ layout = html.Div(
             children=[
                 dropdown,
                 dbc.Row(
+                    "Experiment Name"
+                ),
+                dbc.Row(
                     [
                         dbc.Col(
                             [
                                 dbc.Row("Combinations"),
-                                dbc.Row("Combination 1"),
-                                dbc.Row("Combination 2"),
+                                dbc.Row("Combination 1 : Header 1 - Image 1 - Description 1"),
+                                dbc.Row("Combination 2 : Header 1 - Image 1 - Description 2"),
                                 dbc.Row("...")
                             ]
                         ),
@@ -60,8 +63,11 @@ layout = html.Div(
                             ]
                         )
                     ]
+                ),
+                dbc.Row(
+                    "Graph Here"
                 )
             ]
-        )
+        ),
     ],
 )
