@@ -6,9 +6,9 @@ TODO:
 import json
 
 import dash_bootstrap_components as dbc
-from app import app
-from common.navbar import navbar
-from constant import PATH_EXPERIMENTS
+from wdo.gui.app import app
+from wdo.gui.common.navbar import navbar
+from wdo.constant import PATH_EXPERIMENTS
 from dash import Dash, Input, Output, State, callback_context, html
 
 layout = html.Div(
