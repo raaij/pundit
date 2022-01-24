@@ -6,9 +6,9 @@ TODO:
 import json
 
 import dash_bootstrap_components as dbc
-from wdo.gui.app import app
-from wdo.gui.common.navbar import navbar
-from wdo.constant import PATH_EXPERIMENTS
+from app import app
+from common.navbar import navbar
+from constant import PATH_EXPERIMENTS
 from dash import Dash, Input, Output, State, callback_context, html
 
 layout = html.Div(
@@ -23,7 +23,7 @@ layout = html.Div(
                             [
                                 dbc.Row(
                                     dbc.Input(
-                                        id="Input-Exp-Name".format("text"),
+                                        id="input1".format("text"),
                                         placeholder="Enter Experiment Name".format("text"),
                                     )
                                 )
@@ -38,17 +38,18 @@ layout = html.Div(
                                 dbc.Row("Headers"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input1".format("text"),
+                                        id="input2".format("text"),
                                         placeholder="Header 1".format("text"),
                                     )
                                 ),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input2".format("text"),
+                                        id="input3".format("text"),
                                         placeholder="Header 2".format("text"),
                                     )
                                 ),
-                                dbc.Row("..."),
+                                dbc.Row([dbc.Button("Add Extra Input Header", id="input-header", n_clicks=0)]),
+                                html.Div(id="container-header"),
                             ]
                         ),
                         dbc.Col(
@@ -56,17 +57,18 @@ layout = html.Div(
                                 dbc.Row("Images"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input3".format("text"),
+                                        id="input4".format("text"),
                                         placeholder="Image 1".format("text"),
                                     )
                                 ),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input4".format("text"),
+                                        id="input5".format("text"),
                                         placeholder="Image 2".format("text"),
                                     )
                                 ),
-                                dbc.Row("..."),
+                                dbc.Row([dbc.Button("Add Extra Input Image", id="input-image", n_clicks=0)]),
+                                html.Div(id="container-image"),
                             ]
                         ),
                     ]
@@ -78,17 +80,18 @@ layout = html.Div(
                                 dbc.Row("Descriptions"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input5".format("text"),
+                                        id="input6".format("text"),
                                         placeholder="Description 1".format("text"),
                                     )
                                 ),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input6".format("text"),
+                                        id="input7".format("text"),
                                         placeholder="Description 2".format("text"),
                                     )
                                 ),
-                                dbc.Row("..."),
+                                dbc.Row([dbc.Button("Add Extra Input Description", id="input-description", n_clicks=0)]),
+                                html.Div(id="container-description"),
                             ]
                         )
                     ]
@@ -100,7 +103,7 @@ layout = html.Div(
                                 dbc.Row("Accuracy"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input7".format("number"),
+                                        id="input8".format("number"),
                                         placeholder="95% by default".format("text"),
                                     )
                                 ),
@@ -108,10 +111,10 @@ layout = html.Div(
                         ),
                         dbc.Col(
                             [
-                                dbc.Row("Confidence"),
+                                dbc.Row("Budget"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input8".format("number"),
+                                        id="input9".format("number"),
                                         placeholder="Enter Value".format("text"),
                                     )
                                 ),
@@ -134,6 +137,7 @@ layout = html.Div(
         ),
     ],
 )
+
 
 
 def toggle_modal(n1, is_open):
