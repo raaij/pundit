@@ -9,6 +9,7 @@ import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, State, callback_context, html
 
 from wdo.constant import PATH_EXPERIMENTS
+from wdo.experiment import Experiment
 from wdo.gui.app import app
 from wdo.gui.common.navbar import navbar
 
@@ -176,7 +177,12 @@ def run_experiment(n_clicks, *values):
     if n_clicks > 0:
         experiment = {idx: value for idx, value in zip(idxs, values)}
         name = experiment["input_1"]  # experiment name
-        with open(PATH_EXPERIMENTS / (name + ".json"), "w+") as fp:
+        path_file = PATH_EXPERIMENTS / (name + ".json")
+        with open(path_file, "w+") as fp:
             json.dump(experiment, fp)
+
+        experiment = Experiment.from_config(path_file)
+        experiment.run()
+        experiment.save()
         return True
     return False
