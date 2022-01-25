@@ -6,10 +6,11 @@ TODO:
 import json
 
 import dash_bootstrap_components as dbc
-from app import app
-from common.navbar import navbar
-from constant import PATH_EXPERIMENTS
 from dash import Dash, Input, Output, State, callback_context, html
+
+from wdo.constant import PATH_EXPERIMENTS
+from wdo.gui.app import app
+from wdo.gui.common.navbar import navbar
 
 layout = html.Div(
     children=[
@@ -48,7 +49,13 @@ layout = html.Div(
                                         placeholder="Header 2".format("text"),
                                     )
                                 ),
-                                dbc.Row([dbc.Button("Add Extra Input Header", id="input-header", n_clicks=0)]),
+                                dbc.Row(
+                                    [
+                                        dbc.Button(
+                                            "Add Extra Input Header", id="input-header", n_clicks=0
+                                        )
+                                    ]
+                                ),
                                 html.Div(id="container-header"),
                             ]
                         ),
@@ -67,7 +74,13 @@ layout = html.Div(
                                         placeholder="Image 2".format("text"),
                                     )
                                 ),
-                                dbc.Row([dbc.Button("Add Extra Input Image", id="input-image", n_clicks=0)]),
+                                dbc.Row(
+                                    [
+                                        dbc.Button(
+                                            "Add Extra Input Image", id="input-image", n_clicks=0
+                                        )
+                                    ]
+                                ),
                                 html.Div(id="container-image"),
                             ]
                         ),
@@ -90,7 +103,15 @@ layout = html.Div(
                                         placeholder="Description 2".format("text"),
                                     )
                                 ),
-                                dbc.Row([dbc.Button("Add Extra Input Description", id="input-description", n_clicks=0)]),
+                                dbc.Row(
+                                    [
+                                        dbc.Button(
+                                            "Add Extra Input Description",
+                                            id="input-description",
+                                            n_clicks=0,
+                                        )
+                                    ]
+                                ),
                                 html.Div(id="container-description"),
                             ]
                         )
@@ -137,7 +158,6 @@ layout = html.Div(
         ),
     ],
 )
-
 
 
 def toggle_modal(n1, is_open):

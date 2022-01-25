@@ -1,6 +1,7 @@
-import numpy as np
 import math
 from abc import abstractmethod
+
+import numpy as np
 
 from wdo.bandits.base import BanditBase
 
@@ -40,7 +41,7 @@ class UGapEBandit(BanditBase):
                 return arm
 
         B_t, L_t, U_t, β_t = self.compute_round_parameters()
-        J_t = np.argsort(B_t)[::-1][:self.m]
+        J_t = np.argsort(B_t)[::-1][: self.m]
         u_t, l_t = self._compute_u_t(J_t, U_t), self._compute_l_t(J_t, L_t)
         arm = u_t if β_t[u_t] > β_t[l_t] else l_t
         return arm
