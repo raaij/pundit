@@ -3,12 +3,14 @@ import numpy as np
 import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, State, callback_context, dcc, html
-
 from wdo.constant import PATH_RESULTS
-from wdo.gui.common.drop import dropdown
+from wdo.gui.common.drop import dropdown1
 from wdo.gui.common.navbar import navbar
-
-
+from wdo.gui.common.dropmetrics import dropdown2
+from wdo.gui.common.dropcombin import dropdown3
+from PyQt5 import QtCore, QtGui, QtWidgets
+from tkinter import Button
+from wdo.gui.common.drop import display_experiment
 data = pd.read_csv(PATH_RESULTS / "example.csv").reset_index()  # TODO this needs to be dynamic
 
 def get_impression_count_grouped():
@@ -37,8 +39,10 @@ def get_table_summary():
     dff = dff[[
         'combination', 'header', 'description', 'image', 'impressions', 'clicks',
     ]]
+
     # TODO: Fix this
     dff['ctr (%)'] = (100 * np.round(dff['clicks'] / dff['impressions'], 4)).astype(str).apply(lambda x: x[:4])
+
     return dbc.Table.from_dataframe(dff, hover=True)
 
 def get_asset_summary(asset_type):
@@ -62,6 +66,7 @@ def get_asset_summary(asset_type):
 layout = html.Div(
     children=[
         navbar,
+        dropdown1,
         dbc.Container(
             children=[
                 dbc.Container(
@@ -83,12 +88,25 @@ layout = html.Div(
                 ),
                 dbc.Row(
                     [
+                        dropdown2,
                         dbc.Col(
                             get_impression_count_grouped(),
                             width=5
                         ),
                         dbc.Col(
                             get_table_summary()
+
+                        ),
+                        dbc.Col(
+                            [
+                                dbc.Button(
+                                    "Download ALL Combinations",
+                                    download="example.csv",
+                                    color="primary",
+                                    external_link=True,
+                                ),
+                                dropdown3
+                            ]
                         )
                     ]
                 ),
