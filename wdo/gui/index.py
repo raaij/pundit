@@ -5,7 +5,7 @@ from wdo.gui.app import app
 from wdo.gui.apps import inputs, results
 
 app.layout = html.Div([dcc.Location(id="url", refresh=False), html.Div(id="page-content")])
-
+server = app.server
 
 @app.callback(Output("page-content", "children"), Input("url", "pathname"))
 def display_page(pathname):

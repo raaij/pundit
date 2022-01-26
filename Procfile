@@ -1,1 +1,1 @@
-web: python -m wdo.gui
+web: gunicorn wdo.gui.index:server
