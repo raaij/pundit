@@ -3,5 +3,6 @@ pandas
 numpy
 matplotlib
 dash-bootstrap-components
+gunicorn
 .
 
