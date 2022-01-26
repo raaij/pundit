@@ -11,7 +11,7 @@ for file in files:
         final_list.append(file.replace(".json", ""))
 items = [dbc.DropdownMenuItem(i) for i in final_list]
 
-dropdown = dbc.DropdownMenu(
+dropdown1 = dbc.DropdownMenu(
     label="Choose Experiment",
     direction="down",
     children=items,
