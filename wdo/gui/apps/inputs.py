@@ -25,7 +25,8 @@ layout = html.Div(
                             [
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input1".format("text"),
+                                        id="input1".format("text") ,
+                                        required="required",
                                         placeholder="Enter Experiment Name".format("text"),
                                     )
                                 )
@@ -41,12 +42,14 @@ layout = html.Div(
                                 dbc.Row(
                                     dbc.Input(
                                         id="input2".format("text"),
+                                        required="required",
                                         placeholder="Header 1".format("text"),
                                     )
                                 ),
                                 dbc.Row(
                                     dbc.Input(
                                         id="input3".format("text"),
+                                        required="required",
                                         placeholder="Header 2".format("text"),
                                     )
                                 ),
@@ -66,12 +69,14 @@ layout = html.Div(
                                 dbc.Row(
                                     dbc.Input(
                                         id="input4".format("text"),
+                                        required="required",
                                         placeholder="Image 1".format("text"),
                                     )
                                 ),
                                 dbc.Row(
                                     dbc.Input(
                                         id="input5".format("text"),
+                                        required="required",
                                         placeholder="Image 2".format("text"),
                                     )
                                 ),
@@ -95,12 +100,14 @@ layout = html.Div(
                                 dbc.Row(
                                     dbc.Input(
                                         id="input6".format("text"),
+                                        required="required",
                                         placeholder="Description 1".format("text"),
                                     )
                                 ),
                                 dbc.Row(
                                     dbc.Input(
                                         id="input7".format("text"),
+                                        required="required",
                                         placeholder="Description 2".format("text"),
                                     )
                                 ),
@@ -137,6 +144,7 @@ layout = html.Div(
                                 dbc.Row(
                                     dbc.Input(
                                         id="input9".format("number"),
+                                        required="required",
                                         placeholder="Enter Value".format("text"),
                                     )
                                 ),
