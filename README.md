@@ -1,4 +1,7 @@
-![PUNDIT BANNER](./img/banner.png)
+<p align="center">
+  <img src="./img/banner.png" width="600" title="PUNDIT banner">
+</p>
+
 ## Decision Support System for Website Design Optimization
 
 This is a decision support system for website design optimization. 
