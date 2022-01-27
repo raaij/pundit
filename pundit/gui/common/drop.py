@@ -2,7 +2,7 @@ import os
 
 import dash_bootstrap_components as dbc
 
-from wdo.constant import PATH_EXPERIMENTS
+from pundit.constant import PATH_EXPERIMENTS
 
 files = os.listdir(PATH_EXPERIMENTS)
 final_list = []

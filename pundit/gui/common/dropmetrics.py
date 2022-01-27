@@ -1,7 +1,7 @@
 import os
 import dash_bootstrap_components as dbc
 from dash import Input, Output, html
-from wdo.gui.app import app
+from pundit.gui.app import app
 from dash import Dash, Input, Output, State, callback_context, dcc, html
 
 

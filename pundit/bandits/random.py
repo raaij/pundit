@@ -1,6 +1,6 @@
 import random
 
-from wdo.bandits import BanditBase
+from pundit.bandits import BanditBase
 
 
 class RandomBandit(BanditBase):

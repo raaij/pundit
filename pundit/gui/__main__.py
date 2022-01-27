@@ -1,4 +1,4 @@
-from wdo.gui.index import app
+from pundit.gui.index import app
 
 
 def main():

@@ -1,10 +1,10 @@
 import json
 import random
 
-from wdo.bandits import EpsilonGreedyBandit
-from wdo.constant import PATH_RESULTS
-from wdo.env import WebsiteEnvironmentSimple
-from wdo.reporter import Reporter
+from pundit.bandits import EpsilonGreedyBandit
+from pundit.constant import PATH_RESULTS
+from pundit.env import WebsiteEnvironmentSimple
+from pundit.reporter import Reporter
 
 N_IMPRESSIONS = 10_000
 

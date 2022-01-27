@@ -1,8 +1,8 @@
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-from wdo.gui.app import app
-from wdo.gui.apps import inputs, results
+from pundit.gui.app import app
+from pundit.gui.apps import inputs, results
 
 app.layout = html.Div([dcc.Location(id="url", refresh=False), html.Div(id="page-content")])
 server = app.server

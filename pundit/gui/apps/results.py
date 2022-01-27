@@ -3,14 +3,14 @@ import numpy as np
 import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, State, callback_context, dcc, html
-from wdo.constant import PATH_RESULTS
-from wdo.gui.common.drop import dropdown1
-from wdo.gui.common.navbar import navbar
-from wdo.gui.common.dropmetrics import dropdown2
-from wdo.gui.common.dropcombin import dropdown3
+from pundit.constant import PATH_RESULTS
+from pundit.gui.common.drop import dropdown1
+from pundit.gui.common.navbar import navbar
+from pundit.gui.common.dropmetrics import dropdown2
+from pundit.gui.common.dropcombin import dropdown3
 from PyQt5 import QtCore, QtGui, QtWidgets
 from tkinter import Button
-from wdo.gui.common.drop import display_experiment
+# from pundit.gui.common.drop import display_experiment
 data = pd.read_csv(PATH_RESULTS / "example.csv").reset_index()  # TODO this needs to be dynamic
 
 def get_impression_count_grouped():

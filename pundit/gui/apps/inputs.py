@@ -8,10 +8,10 @@ import json
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, State, callback_context, html
 
-from wdo.constant import PATH_EXPERIMENTS
-from wdo.experiment import Experiment
-from wdo.gui.app import app
-from wdo.gui.common.navbar import navbar
+from pundit.constant import PATH_EXPERIMENTS
+from pundit.experiment import Experiment
+from pundit.gui.app import app
+from pundit.gui.common.navbar import navbar
 
 layout = html.Div(
     children=[
