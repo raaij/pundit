@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./img/banner.png" width="500" title="PUNDIT banner">
+  <img src="./img/banner.png" width="400" title="PUNDIT banner">
 </p>
 
 ## Decision Support System for Website Design Optimization
