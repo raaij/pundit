@@ -182,15 +182,17 @@ def toggle_modal(n1, is_open):
 )
 def run_experiment(n_clicks, *values):
     idxs = [f"input_{i}" for i in range(1, 9)]
-    if n_clicks > 0:
-        experiment = {idx: value for idx, value in zip(idxs, values)}
-        name = experiment["input_1"]  # experiment name
-        path_file = PATH_EXPERIMENTS / (name + ".json")
-        with open(path_file, "w+") as fp:
-            json.dump(experiment, fp)
+    experiment = {idx: value for idx, value in zip(idxs, values)}
+    numb_req = {1, 2, 3, 4, 5, 6, 7, 9}
+    for numb in numb_req:
+        if n_clicks > 0 and experiment[("input_"+str(numb))] is not None:
+            name = experiment["input_1"]  # experiment name
+            path_file = PATH_EXPERIMENTS / (name + ".json")
+            with open(path_file, "w+") as fp:
+                json.dump(experiment, fp)
 
-        experiment = Experiment.from_config(path_file)
-        experiment.run()
-        experiment.save()
-        return True
-    return False
+            experiment = Experiment.from_config(path_file)
+            experiment.run()
+            experiment.save()
+            return True
+        return False
