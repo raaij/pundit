@@ -178,21 +178,25 @@ def toggle_modal(n1, is_open):
 @app.callback(
     Output("modal-lg", "is_open"),
     Input("run-experiment", "n_clicks"),
-    [State("input{}".format(i), "value") for i in range(1, 9)],
+    [State("input{}".format(i), "value") for i in range(1, 10)],
 )
 def run_experiment(n_clicks, *values):
-    idxs = [f"input_{i}" for i in range(1, 9)]
+    idxs = [f"input_{i}" for i in range(1, 10)]
     experiment = {idx: value for idx, value in zip(idxs, values)}
-    numb_req = {1, 2, 3, 4, 5, 6, 7, 9}
+    numb_req = [1, 2, 3, 4, 5, 6, 7, 9]
+    counter = 0
     for numb in numb_req:
-        if n_clicks > 0 and experiment[("input_"+str(numb))] is not None:
-            name = experiment["input_1"]  # experiment name
-            path_file = PATH_EXPERIMENTS / (name + ".json")
-            with open(path_file, "w+") as fp:
-                json.dump(experiment, fp)
+        if experiment[("input_" + str(numb))] is not None:
+            counter += 1
+    if n_clicks > 0 and counter == 8:
+        name = experiment["input_1"]  # experiment name
+        path_file = PATH_EXPERIMENTS / (name + ".json")
+        with open(path_file, "w+") as fp:
+            json.dump(experiment, fp)
 
-            experiment = Experiment.from_config(path_file)
-            experiment.run()
-            experiment.save()
-            return True
-        return False
+        experiment = Experiment.from_config(path_file)
+        experiment.run()
+        experiment.save()
+        return True
+    return False
+
