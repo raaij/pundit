@@ -186,7 +186,7 @@ def run_experiment(n_clicks, *values):
     numb_req = [1, 2, 3, 4, 5, 6, 7, 9]
     counter = 0
     for numb in numb_req:
-        if experiment[("input_" + str(numb))] is not None:
+        if experiment[("input_" + str(numb))] is not None and experiment[("input_" + str(numb))] is not "":
             counter += 1
     if n_clicks > 0 and counter == 8:
         name = experiment["input_1"]  # experiment name
