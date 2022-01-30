@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 
 class BanditBase(ABC):
-    def __init__(self, K, env, reporter=None, *args, **kwargs):
-        self.arms = list(range(K))
+    def __init__(self, env, reporter=None, *args, **kwargs):
+        self.arms = list(range(len(env.proba)))
         self.reporter = reporter
         self.env = env
         self.history = []

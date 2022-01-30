@@ -6,79 +6,95 @@ import numpy as np
 from pundit.bandits.base import BanditBase
 
 
-class UGapEBandit(BanditBase):
-    def __init__(self, ϵ, m, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+class UGapE:
+    """
+    TODO:
+    - Use BanditBase
+    """
+    def __init__(self, ϵ, m, env, *args, **kwargs):
+        # TODO: Make it work for more than 1 arm?
+        assert m == 1
+
         self.ϵ = ϵ
         self.m = m
+        self.env = env
 
-        self.rewards = {arm: [] for arm in self.arms}
+        self.arms = list(range(env.number_of_actions))
+        self._rewards = {arm: [] for arm in self.arms}
 
-    def compute_round_parameters(self):
-        betas = []
-        lower_bounds = []
-        upper_bounds = []
-        regret_bounds = []
+        for param in ['β', 'U', 'L', 'B']:
+            setattr(self, param, None)
 
-        for arm in self.arms:
-            arm_beta = self.get_arm_beta(arm)
-            betas.append(arm_beta)
-            lower_bounds.append(self._compute_mean_reward(arm) - arm_beta)
-            upper_bounds.append(self._compute_mean_reward(arm) + arm_beta)
+        self.t = 1
 
-        for k in set(self.arms):
-            values = []
-            for i in set(self.arms) - {arm}:
-                values.append(upper_bounds[i] - lower_bounds[k])
-            regret_bounds.append(max(values))
-
-        return regret_bounds, lower_bounds, upper_bounds, betas
+    def play_round(self):
+        action = self.get_action()
+        reward = self.env.do(action)
+        self.update(action, reward)
 
     def get_action(self):
-        # Makes sure we have played every arm at least once
-        for arm, rewards in self.rewards.items():
-            if len(rewards) == 0:
+        # Check if any arm has not been pulled
+        for arm in self.arms:
+            if not len(self._rewards[arm]):
                 return arm
 
-        B_t, L_t, U_t, β_t = self.compute_round_parameters()
-        J_t = np.argsort(B_t)[::-1][: self.m]
-        u_t, l_t = self._compute_u_t(J_t, U_t), self._compute_l_t(J_t, L_t)
-        arm = u_t if β_t[u_t] > β_t[l_t] else l_t
-        return arm
+        # Stop condition ?
+        μ = np.array([np.mean(self._rewards[arm]) for arm in self.arms])
+        T = np.array([len(self._rewards[arm]) for arm in self.arms])
+        self.β = self.compute_β(T=T)
+        self.L, self.U = μ - self.β, μ + self.β
+        self.B = self.compute_B()
 
-    @abstractmethod
-    def get_arm_beta(self, arm):
+        J = np.argmin(self.B)
+        l = J
+        # TODO: Shorter code?
+        u, u_value = None, None
+        for arm in set(self.arms) - {J}:
+            if u == None or self.U[arm] > u_value:
+                u, u_value = arm, self.U[arm]
+
+        I = l if self.β[l] >= self.β[u] else u
+        return I
+
+    def update(self, action, reward):
+        self._rewards[action].append(reward)
+        self.t += 1
+
+    def compute_β(self, *args, **kwargs):
         raise NotImplementedError()
 
-    def _update(self, arm, reward):
-        self.rewards[arm].append(reward)
-
-    def _compute_l_t(self, J_t, L_t):
-        l_t, l_t_value = None, None
-        for arm in J_t:
-            if not l_t_value or L_t[arm] > l_t_value:
-                l_t = arm
-                l_t_value = L_t[arm]
-        return l_t
-
-    def _compute_u_t(self, J_t, U_t):
-        u_t, u_t_value = None, None
-        for arm in set(self.arms) - set(J_t):
-            if not u_t_value or U_t[arm] > u_t_value:
-                u_t = arm
-                u_t_value = U_t[arm]
-        return u_t
-
-    def _compute_mean_reward(self, arm):
-        return np.mean(self.rewards[arm])
+    def compute_B(self):
+        # TODO - Make this more efficient?
+        B = []
+        for k in self.arms:
+            B.append(max([
+                self.U[i] - self.L[k] for i in set(self.arms) - {k}
+            ]))
+        return B
 
 
-class UGapEBudgetBandit(UGapEBandit):
+class UGapEb(UGapE):
     def __init__(self, ϵ, m, n, a, *args, **kwargs):
-        super().__init__(ϵ=ϵ, m=m, *args, **kwargs)
+        super().__init__(ϵ, m, *args, **kwargs)
         self.n = n
         self.a = a
 
-    def get_arm_beta(self, arm):
-        # TODO: In our case, b = 1. This could be dynamically set.
-        return math.sqrt(self.a / len(self.rewards[arm]))
+    def compute_β(self, T, *args, **kwargs):
+        b = 1  # TODO - Should be a parameter
+        return b * np.sqrt(self.a / T)
+
+
+class UGapEc(UGapE):
+    def __init__(self, ϵ, m, δ, c, *args, **kwargs):
+        super().__init__(ϵ, m, *args, **kwargs)
+        self.δ = δ
+        self.c = c
+
+    def compute_β(self, T, *args, **kwargs):
+        b = 1  # TODO - Should be a parameter
+        K = len(self.arms)
+
+        return b * np.sqrt(
+            (self.c * math.log((4 * K * (self.t - 1) ** 3) / self.δ)) /
+            T
+        )
