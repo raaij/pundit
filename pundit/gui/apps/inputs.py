@@ -1,8 +1,3 @@
-"""
-TODO:
-    - Make number of inputs dynamic
-"""
-
 import json
 
 import dash_bootstrap_components as dbc
@@ -41,26 +36,12 @@ layout = html.Div(
                                 dbc.Row("Headers"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input2".format("text"),
+                                        id="input2".format("number"),
                                         required="required",
-                                        placeholder="Header 1".format("text"),
-                                    )
+                                        placeholder="Number of Headers".format("text"),
+                                    ),
                                 ),
-                                dbc.Row(
-                                    dbc.Input(
-                                        id="input3".format("text"),
-                                        required="required",
-                                        placeholder="Header 2".format("text"),
-                                    )
-                                ),
-                                dbc.Row(
-                                    [
-                                        dbc.Button(
-                                            "Add Extra Input Header", id="input-header", n_clicks=0
-                                        )
-                                    ]
-                                ),
-                                html.Div(id="container-header"),
+                                html.Div(id="container-header")
                             ]
                         ),
                         dbc.Col(
@@ -68,24 +49,10 @@ layout = html.Div(
                                 dbc.Row("Images"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input4".format("text"),
+                                        id="input3".format("number"),
                                         required="required",
-                                        placeholder="Image 1".format("text"),
-                                    )
-                                ),
-                                dbc.Row(
-                                    dbc.Input(
-                                        id="input5".format("text"),
-                                        required="required",
-                                        placeholder="Image 2".format("text"),
-                                    )
-                                ),
-                                dbc.Row(
-                                    [
-                                        dbc.Button(
-                                            "Add Extra Input Image", id="input-image", n_clicks=0
-                                        )
-                                    ]
+                                        placeholder="Number of Images".format("text"),
+                                    ),
                                 ),
                                 html.Div(id="container-image"),
                             ]
@@ -99,26 +66,10 @@ layout = html.Div(
                                 dbc.Row("Descriptions"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input6".format("text"),
+                                        id="input4".format("number"),
                                         required="required",
-                                        placeholder="Description 1".format("text"),
+                                        placeholder="Number of Descriptions".format("text"),
                                     )
-                                ),
-                                dbc.Row(
-                                    dbc.Input(
-                                        id="input7".format("text"),
-                                        required="required",
-                                        placeholder="Description 2".format("text"),
-                                    )
-                                ),
-                                dbc.Row(
-                                    [
-                                        dbc.Button(
-                                            "Add Extra Input Description",
-                                            id="input-description",
-                                            n_clicks=0,
-                                        )
-                                    ]
                                 ),
                                 html.Div(id="container-description"),
                             ]
@@ -132,7 +83,7 @@ layout = html.Div(
                                 dbc.Row("Accuracy"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input8".format("number"),
+                                        id="input5".format("number"),
                                         placeholder="95% by default".format("text"),
                                     )
                                 ),
@@ -143,7 +94,7 @@ layout = html.Div(
                                 dbc.Row("Budget"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input9".format("number"),
+                                        id="input6".format("number"),
                                         required="required",
                                         placeholder="Enter Value".format("text"),
                                     )
@@ -178,17 +129,17 @@ def toggle_modal(n1, is_open):
 @app.callback(
     Output("modal-lg", "is_open"),
     Input("run-experiment", "n_clicks"),
-    [State("input{}".format(i), "value") for i in range(1, 10)],
+    [State("input{}".format(i), "value") for i in range(1, 7)],
 )
 def run_experiment(n_clicks, *values):
-    idxs = [f"input_{i}" for i in range(1, 10)]
+    idxs = [f"input_{i}" for i in range(1, 7)]
     experiment = {idx: value for idx, value in zip(idxs, values)}
-    numb_req = [1, 2, 3, 4, 5, 6, 7, 9]
+    numb_req = [1, 2, 3, 4, 6]
     counter = 0
     for numb in numb_req:
         if experiment[("input_" + str(numb))] is not None and experiment[("input_" + str(numb))] != "":
             counter += 1
-    if n_clicks > 0 and counter == 8:
+    if n_clicks > 0 and counter == 5:
         name = experiment["input_1"]  # experiment name
         path_file = PATH_EXPERIMENTS / (name + ".json")
         with open(path_file, "w+") as fp:
