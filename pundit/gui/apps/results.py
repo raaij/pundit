@@ -24,6 +24,7 @@ def fix_data():
         get_table_summary(data)
         return data
 
+
 def get_impression_count_grouped(data):
     data['hundred'] = np.round(data.time, -2)
     dff = data.groupby(['hundred', 'arm'])[['reward']].count().reset_index()
@@ -89,7 +90,7 @@ layout = html.Div(
                                 width=1
                             ),
                             dbc.Col(
-                                html.P(drop.final_list[len(drop.final_list)-1]),
+                                html.P(drop.fix_final_list()[len(drop.fix_final_list())-1]),
                                 className="lead"
                             )
                         ])
@@ -117,6 +118,7 @@ layout = html.Div(
                                     download="example.csv",
                                     color="primary",
                                     external_link=True,
+                                    id="download",
                                 ),
                                 dropdown3
                             ]
@@ -173,6 +175,7 @@ def display_graph(children, *args):
     Input("drop-experiment", "children"),
     prevent_initial_calls=True
 )
+
 
 def display_table(children, *args):
     ctx = callback_context
