@@ -48,4 +48,5 @@ def display_experiment(*args):
     if ctx.triggered:
         fix_final_list()
         button_id.append(ctx.triggered[0]["prop_id"].split(".")[0])
-        return "The Experiment is: " + button_id[len(button_id)-1]
+        return True
+
