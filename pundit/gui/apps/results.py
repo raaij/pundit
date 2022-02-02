@@ -126,13 +126,16 @@ layout = html.Div(
                 dbc.Row(
                     [
                         dbc.Col(
-                            get_asset_summary('header', fix_data())
+                            get_asset_summary('header', fix_data()),
+                            id='table2'
                         ),
                         dbc.Col(
-                            get_asset_summary('description', fix_data())
+                            get_asset_summary('description', fix_data()),
+                            id='table3'
                         ),
                         dbc.Col(
-                            get_asset_summary('image', fix_data())
+                            get_asset_summary('image', fix_data()),
+                            id='table4'
                         ),
                     ]
                 )
@@ -175,3 +178,34 @@ def display_table(children, *args):
     ctx = callback_context
     if children is not None:
         return get_table_summary(fix_data())
+
+@app.callback(
+    Output("table2", "children"),
+    Input("drop-experiment", "children"),
+    prevent_initial_calls=True
+)
+
+def display_table2(children, *args):
+    ctx = callback_context
+    if children is not None:
+        return get_asset_summary('header', fix_data())
+@app.callback(
+    Output("table3", "children"),
+    Input("drop-experiment", "children"),
+    prevent_initial_calls=True
+)
+
+def display_table3(children, *args):
+    ctx = callback_context
+    if children is not None:
+        return get_asset_summary('description', fix_data())
+@app.callback(
+    Output("table4", "children"),
+    Input("drop-experiment", "children"),
+    prevent_initial_calls=True
+)
+
+def display_table4(children, *args):
+    ctx = callback_context
+    if children is not None:
+        return get_asset_summary('image', fix_data())
