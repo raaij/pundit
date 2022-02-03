@@ -29,7 +29,6 @@ def get_input_list():
         data = pd.read_csv(PATH_EXPERIMENTS / (drop.final_list[0] + ".json")).reset_index()  # TODO this needs to be dynamic
         return data
     else:
-        print("GGGGGGGGGGGGGG")
         json_data = pd.read_csv(PATH_EXPERIMENTS / (drop.button_id[len(drop.button_id)-1]+".json")).reset_index()  #
         return json_data
 
