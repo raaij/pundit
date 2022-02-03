@@ -23,6 +23,15 @@ def fix_data():
         get_impression_count_grouped(data)
         get_table_summary(data)
         return data
+    
+def get_input_list():
+    if len(drop.button_id) == 0:
+        data = pd.read_csv(PATH_EXPERIMENTS / (drop.final_list[0] + ".json")).reset_index()  # TODO this needs to be dynamic
+        return data
+    else:
+        print("GGGGGGGGGGGGGG")
+        json_data = pd.read_csv(PATH_EXPERIMENTS / (drop.button_id[len(drop.button_id)-1]+".json")).reset_index()  #
+        return json_data
 
 
 def get_impression_count_grouped(data):
