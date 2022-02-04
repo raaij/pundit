@@ -16,19 +16,13 @@ from tkinter import Button
 # from pundit.gui.common.drop import display_experiment
 from pundit.gui.common import drop
 
+
 def fix_data(experiment=None):
     if not experiment:
         experiment = 'example'
     data = pd.read_csv(PATH_RESULTS / (experiment + '.csv')).reset_index()
-    # if len(drop.button_id) == 0:
-    #     data = pd.read_csv(PATH_RESULTS / (drop.final_list[0] + ".csv")).reset_index()  # TODO this needs to be dynamic
-    #     return data
-    # else:
-    #     data = pd.read_csv(PATH_RESULTS / (drop.button_id[len(drop.button_id)-1]+".csv")).reset_index()# TODO this needs to be dynamic
-    #     get_impression_count_grouped(data)
-    #     get_table_summary(data)
-    #     return data
     return data
+
 
 def get_impression_count_grouped(data):
     data['hundred'] = np.round(data.time, -2)
