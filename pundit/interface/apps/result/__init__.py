@@ -1,3 +1,5 @@
+import itertools
+
 from dash import html
 from dash import dcc
 import dash_bootstrap_components as dbc
@@ -10,19 +12,10 @@ import re
 import os
 from copy import copy
 from dash.dependencies import Input, Output
+from dash.exceptions import PreventUpdate
 
 from pundit.interface.app import app
 from pundit.constant import PATH_DATA_RESULT
-
-
-
-# def fix_final_list():
-#     files = os.listdir(PATH_EXPERIMENTS)
-#     for file1 in files:
-#         if file1.endswith(".json"):
-#             final_list.append(file1.replace(".json", ""))
-#     items = [dbc.DropdownMenuItem(i, id=i) for i in final_list]
-#     return items
 
 
 def reload_data(experiment=None):
@@ -82,6 +75,8 @@ def render_tab_content(active_tab):
     if active_tab:
         if active_tab == "summary":
             return get_summary()
+        if active_tab == "assets":
+            return get_assets()
     return "No tab selected"
 
 
@@ -111,7 +106,26 @@ def get_summary():
             ])
         ])
     ]
-
+def get_assets():
+    return [
+        html.Br(),
+        dbc.Row([
+            dbc.Col([
+                dbc.Row(
+                    id='asset_headers',
+                    children=get_asset_summary('header', reload_data())
+                ),
+                dbc.Row(
+                    id='asset_description',
+                    children=get_asset_summary('description', reload_data())
+                ),
+                dbc.Row(
+                    id='asset_image',
+                    children=get_asset_summary('image', reload_data())
+                )
+            ])
+        ])
+    ]
 # @app.callback(Output("store", "data"), [Input("button", "n_clicks")])
 # def generate_graphs(n):
 #     """
@@ -136,21 +150,15 @@ def get_summary():
 #     # save figures in a dictionary for sending to the dcc.Store
 #     return {"scatter": scatter, "hist_1": hist_1, "hist_2": hist_2}
 #
+def get_data_head(name, data):
+    df_header = data.groupby(name).agg({'reward': ['sum', 'count']}).reset_index()
+    return df_header
 
 def get_top_10_table_summary(data):
-    df_header = data.groupby('header').agg({
-        'reward': ['sum', 'count']
-    }).reset_index()
-    df_description = data.groupby('description').agg({
-        'reward': ['sum', 'count']
-    }).reset_index()
-    df_image = data.groupby('image').agg({
-        'reward': ['sum', 'count']
-    }).reset_index()
     dff = data.groupby('action').agg({
         'reward': ['sum', 'count']
     }).reset_index()
-    meta = pd.DataFrame(list(itertools.product(range(df_header['header'].max()+1), range(df_description['description'].max()+1), range(df_image['image'].max()+1))))
+    meta = pd.DataFrame(list(itertools.product(range(get_data_head('header', data)['header'].max()+1), range(get_data_head('description', data)['description'].max()+1), range(get_data_head('image', data)['image'].max()+1))))
     dff['header'] = meta[0]
     dff['description'] = meta[1]
     dff['image'] = meta[2]
@@ -172,8 +180,22 @@ def get_top_10_table_summary(data):
     table = dbc.Table.from_dataframe(dff, striped=True, bordered=True, hover=True)
     return table
 
-
-
+def get_asset_summary(asset_type, data):
+    import itertools
+    dff = data.groupby('action').agg({'reward': ['sum', 'count']})
+    dff = dff.reset_index()
+    dff.columns = ['combination', 'impressions', 'clicks']
+    meta = pd.DataFrame(list(itertools.product(range(get_data_head('header', data)['header'].max()+1), range(get_data_head('description', data)['description'].max()+1), range(get_data_head('image', data)['image'].max()+1))))
+    dff['header'] = meta[0]
+    dff['description'] = meta[1]
+    dff['image'] = meta[2]
+    dff = dff[[
+        'combination', 'header', 'description', 'image', 'impressions', 'clicks',
+    ]]
+    dff = dff.groupby(asset_type)[['impressions', 'clicks']].sum().reset_index()
+    dff[asset_type] = f'{asset_type.title()} ' + dff[asset_type].apply(str)
+    dff['ctr (%)'] = (100 * np.round(dff['clicks'] / dff['impressions'], 4)).astype(str).apply(lambda x: x[:4])
+    return dbc.Table.from_dataframe(dff, hover=True)
 
 def get_graph_summary(data):
     import random
@@ -388,3 +410,27 @@ def update_best_combination_card_summary(value):
 )
 def update_metric_aggregates_summary(value):
     return get_metric_aggregates_summary(reload_data(value))
+
+@app.callback(
+    Output('asset_headers', "children"),
+    Input('result-dropdown', 'value'),
+    prevent_initial_calls=True
+)
+def update_asset_header(value):
+    return get_asset_summary('header', reload_data(value))
+
+@app.callback(
+    Output('asset_description', "children"),
+    Input('result-dropdown', 'value'),
+    prevent_initial_calls=True
+)
+def update_asset_description(value):
+    return get_asset_summary('description', reload_data(value))
+
+@app.callback(
+    Output('asset_image', "children"),
+    Input('result-dropdown', 'value'),
+    prevent_initial_calls=True
+)
+def update_asset_image(value):
+    return get_asset_summary('image', reload_data(value))
