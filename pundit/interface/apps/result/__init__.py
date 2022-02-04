@@ -184,7 +184,7 @@ def get_asset_summary(asset_type, data):
     import itertools
     dff = data.groupby('action').agg({'reward': ['sum', 'count']})
     dff = dff.reset_index()
-    dff.columns = ['combination', 'impressions', 'clicks']
+    dff.columns = ['combination','clicks', 'impressions']
     meta = pd.DataFrame(list(itertools.product(range(get_data_head('header', data)['header'].max()+1), range(get_data_head('description', data)['description'].max()+1), range(get_data_head('image', data)['image'].max()+1))))
     dff['header'] = meta[0]
     dff['description'] = meta[1]
