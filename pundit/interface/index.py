@@ -36,19 +36,6 @@ def display_page(pathname):
     else:
         return '404'
 
-"""
-EXPERIMENT
-"""
-
-@app.callback(
-    Output("modal-lg", "is_open"),
-    Input("run-experiment", "n_clicks"),
-    [State(input_id, "value") for input_id in ALL_INPUT_LIST],
-)
-def run_experiment(n_clicks, *values):
-    from pundit.interface.apps.experiment import _run_experiment
-    _run_experiment(n_clicks, *values)
-
 
 """
 RESULTS
