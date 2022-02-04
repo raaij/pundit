@@ -247,6 +247,11 @@ def get_graph_summary(data):
 
     # Create axis objects
     fig.update_layout(
+                xaxis=dict(
+            autorange=True,
+            rangeslider=dict(
+                autorange=True,
+            )),
         yaxis=dict(
             title="impressions",
             visible=False,
