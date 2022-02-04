@@ -1,6 +1,6 @@
 import json
 import dash_bootstrap_components as dbc
-import dash_html_components as html
+from dash import html
 from dash.dependencies import Input, Output, State
 from pundit.interface.app import app
 from pundit.constant import PATH_DATA_INPUT, PATH_DATA_RESULT
