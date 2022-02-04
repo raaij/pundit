@@ -44,16 +44,11 @@ layout = dbc.Container(
                         [
                             dbc.Tab(label="Summary", tab_id="summary"),
                             dbc.Tab(label="Assets", tab_id="assets"),
-                            dbc.Tab(label="Comparison", tab_id="comparison"),
                         ],
                         id="tabs",
                         active_tab="summary",
                     ),
                     width=10
-                ),
-                dbc.Col(
-                    dbc.Button('Download Data'),
-                    className="d-flex justify-content-end"
                 ),
             ],
         ),
