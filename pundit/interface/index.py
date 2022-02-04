@@ -17,6 +17,7 @@ app.layout = html.Div([
 """
 FOR WHATEVER REASON CALLBACKS DON'T SEEM TO WORK WHEN 
 DEFINED IN OTHER FILES, SO THEY'RE ALL PUT HERE
+TODO: Works now so move experiment callback back
 """
 
 """
@@ -54,8 +55,5 @@ RESULTS
 """
 
 
-
-
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8051)
-
+    app.run_server(debug=True)
