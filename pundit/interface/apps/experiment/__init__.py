@@ -128,6 +128,11 @@ def toggle_modal(n1, is_open):
         return not is_open
     return is_open
 
+@app.callback(
+    Output("modal-lg", "is_open"),
+    Input("run-experiment", "n_clicks"),
+    [State(input_id, "value") for input_id in ALL_INPUT_LIST],
+)
 
 def _run_experiment(n_clicks, *values):
     experiment = {idx: value for idx, value in zip(ALL_INPUT_LIST, values)}
