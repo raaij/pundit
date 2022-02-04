@@ -13,11 +13,6 @@ app.layout = html.Div([
     sidebar,
 ])
 
-"""
-FOR WHATEVER REASON CALLBACKS DON'T SEEM TO WORK WHEN 
-DEFINED IN OTHER FILES, SO THEY'RE ALL PUT HERE
-TODO: Works now so move experiment callback back
-"""
 
 """
 MAIN
@@ -36,9 +31,7 @@ def display_page(pathname):
         return '404'
 
 
-"""
-RESULTS
-"""
+
 
 
 if __name__ == '__main__':
