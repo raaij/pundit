@@ -195,6 +195,7 @@ def get_asset_summary(asset_type, data):
     dff = dff.groupby(asset_type)[['impressions', 'clicks']].sum().reset_index()
     dff[asset_type] = f'{asset_type.title()} ' + dff[asset_type].apply(str)
     dff['ctr (%)'] = (100 * np.round(dff['clicks'] / dff['impressions'], 4)).astype(str).apply(lambda x: x[:4])
+    dff = dff.sort_values('ctr (%)', ascending=False)[:10]
     return dbc.Table.from_dataframe(dff, hover=True)
 
 def get_graph_summary(data):
