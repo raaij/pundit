@@ -138,10 +138,19 @@ def get_summary():
 #
 
 def get_top_10_table_summary(data):
+    df_header = data.groupby('header').agg({
+        'reward': ['sum', 'count']
+    }).reset_index()
+    df_description = data.groupby('description').agg({
+        'reward': ['sum', 'count']
+    }).reset_index()
+    df_image = data.groupby('image').agg({
+        'reward': ['sum', 'count']
+    }).reset_index()
     dff = data.groupby('action').agg({
         'reward': ['sum', 'count']
     }).reset_index()
-    meta = pd.DataFrame(list(itertools.product(range(2), range(2), range(2))))
+    meta = pd.DataFrame(list(itertools.product(range(df_header['header'].max()+1), range(df_description['description'].max()+1), range(df_image['image'].max()+1))))
     dff['header'] = meta[0]
     dff['description'] = meta[1]
     dff['image'] = meta[2]
@@ -162,6 +171,7 @@ def get_top_10_table_summary(data):
     ]
     table = dbc.Table.from_dataframe(dff, striped=True, bordered=True, hover=True)
     return table
+
 
 
 
