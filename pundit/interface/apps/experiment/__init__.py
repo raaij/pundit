@@ -111,6 +111,7 @@ layout = html.Div(
             [
                 dbc.ModalHeader(dbc.ModalTitle("Ran experiment!")),
                 dbc.ModalBody("You can visit the results page to view the results."),
+                dbc.ModalBody("A .csv file of the experiment has been downloaded onto 2022-pobp/data/result/experiment_name."),
             ],
             id="modal-lg",
             size="lg",
