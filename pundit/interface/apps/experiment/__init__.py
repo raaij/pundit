@@ -1,16 +1,12 @@
 import json
-
 import dash_bootstrap_components as dbc
-from dash import Dash, Input, Output, State, callback_context, html
-
-# from pundit.constant import PATH_EXPERIMENTS
-# from pundit.experiment import Experiment
-# from pundit.gui.app import app
-# from pundit.gui.common.navbar import navbar
-
+import dash_html_components as html
+from dash.dependencies import Input, Output, State
+from pundit.interface.app import app
 from pundit.constant import PATH_DATA_INPUT, PATH_DATA_RESULT
 from pundit.core.experiment import Experiment
 from .input import *
+
 
 
 layout = html.Div(
