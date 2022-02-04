@@ -3,14 +3,18 @@ import json
 import dash_bootstrap_components as dbc
 from dash import Dash, Input, Output, State, callback_context, html
 
-from pundit.constant import PATH_EXPERIMENTS
-from pundit.experiment import Experiment
-from pundit.gui.app import app
-from pundit.gui.common.navbar import navbar
+# from pundit.constant import PATH_EXPERIMENTS
+# from pundit.experiment import Experiment
+# from pundit.gui.app import app
+# from pundit.gui.common.navbar import navbar
+
+from pundit.constant import PATH_DATA_INPUT, PATH_DATA_RESULT
+from pundit.core.experiment import Experiment
+from .input import *
+
 
 layout = html.Div(
     children=[
-        navbar,
         dbc.Container(
             children=[
                 dbc.Row(
@@ -20,7 +24,7 @@ layout = html.Div(
                             [
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input1".format("text") ,
+                                        id=INPUT_EXPERIMENT_NAME,
                                         required="required",
                                         placeholder="Enter Experiment Name".format("text"),
                                     )
@@ -36,7 +40,7 @@ layout = html.Div(
                                 dbc.Row("Headers"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input2".format("number"),
+                                        id=INPUT_HEADER_COUNT,
                                         required="required",
                                         placeholder="Number of Headers".format("text"),
                                     ),
@@ -49,7 +53,7 @@ layout = html.Div(
                                 dbc.Row("Images"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input3".format("number"),
+                                        id=INPUT_IMAGE_COUNT,
                                         required="required",
                                         placeholder="Number of Images".format("text"),
                                     ),
@@ -66,7 +70,7 @@ layout = html.Div(
                                 dbc.Row("Descriptions"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input4".format("number"),
+                                        id=INPUT_DESCRIPTION_COUNT,
                                         required="required",
                                         placeholder="Number of Descriptions".format("text"),
                                     )
@@ -80,10 +84,11 @@ layout = html.Div(
                     [
                         dbc.Col(
                             [
-                                dbc.Row("Accuracy"),
+                                dbc.Row("Confidence (%)"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input5".format("number"),
+                                        id=INPUT_CONFIDENCE,
+                                        value="95",
                                         placeholder="95% by default".format("text"),
                                     )
                                 ),
@@ -94,8 +99,7 @@ layout = html.Div(
                                 dbc.Row("Budget"),
                                 dbc.Row(
                                     dbc.Input(
-                                        id="input6".format("number"),
-                                        required="required",
+                                        id=INPUT_BUDGET,
                                         placeholder="Enter Value".format("text"),
                                     )
                                 ),
@@ -119,35 +123,34 @@ layout = html.Div(
     ],
 )
 
-
 def toggle_modal(n1, is_open):
     if n1:
         return not is_open
     return is_open
 
 
-@app.callback(
-    Output("modal-lg", "is_open"),
-    Input("run-experiment", "n_clicks"),
-    [State("input{}".format(i), "value") for i in range(1, 7)],
-)
-def run_experiment(n_clicks, *values):
-    idxs = [f"input_{i}" for i in range(1, 7)]
-    experiment = {idx: value for idx, value in zip(idxs, values)}
-    numb_req = [1, 2, 3, 4, 6]
-    counter = 0
-    for numb in numb_req:
-        if experiment[("input_" + str(numb))] is not None and experiment[("input_" + str(numb))] != "":
-            counter += 1
-    if n_clicks > 0 and counter == 5:
-        name = experiment["input_1"]  # experiment name
-        path_file = PATH_EXPERIMENTS / (name + ".json")
+def _run_experiment(n_clicks, *values):
+    experiment = {idx: value for idx, value in zip(ALL_INPUT_LIST, values)}
+
+    if n_clicks > 0:
+        name = experiment[INPUT_EXPERIMENT_NAME]  # experiment name
+        _initialize_experiment_directories(name)
+        path_file = PATH_DATA_INPUT / name / "input.json"
+
         with open(path_file, "w+") as fp:
             json.dump(experiment, fp)
 
-        experiment = Experiment.from_config(path_file)
+        experiment = Experiment.from_input(path_file)
+        experiment.configure()
         experiment.run()
         experiment.save()
         return True
     return False
 
+def _initialize_experiment_directories(name):
+    for directory in [
+        PATH_DATA_INPUT / name,
+        PATH_DATA_RESULT / name,
+        # TODO: Static directory
+    ]:
+        directory.mkdir(exist_ok=True)
