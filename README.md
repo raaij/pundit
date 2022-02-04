@@ -15,5 +15,5 @@ pip install -e .
 
 The interface may then be run with the command
 ```commandline
-python -m pundit.gui
+python -m pundit.interface
 ```
