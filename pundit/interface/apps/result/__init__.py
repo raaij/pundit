@@ -141,18 +141,28 @@ def get_top_10_table_summary(data):
     dff = data.groupby('action').agg({
         'reward': ['sum', 'count']
     }).reset_index()
-    dff.columns = ['action', 'clicks', 'impressions']
+    meta = pd.DataFrame(list(itertools.product(range(2), range(2), range(2))))
+    dff['header'] = meta[0]
+    dff['description'] = meta[1]
+    dff['image'] = meta[2]
+    dff.columns = ['action','clicks', 'impressions', 'header', 'description', 'image']
     dff['ctr'] = np.round(100.0 * (dff['clicks'] / dff['impressions']), 2)
     dff = dff.sort_values('ctr', ascending=False)[:10]
-    dff = dff[['action', 'impressions', 'clicks', 'ctr']]
+    dff = dff[[
+        'action', 'header', 'description', 'image', 'impressions', 'clicks','ctr'
+    ]]
     dff.columns = [
         'Combination',
+        'header',
+        'description',
+        'image',
         'Impressions',
         'Clicks',
         'Click-Through Rate (%)'
     ]
     table = dbc.Table.from_dataframe(dff, striped=True, bordered=True, hover=True)
     return table
+
 
 
 def get_graph_summary(data):
